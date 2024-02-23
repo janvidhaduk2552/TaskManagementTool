@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+Auth::routes();
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/Task', [App\Http\Controllers\TaskController::class, 'Task']);
+    Route::get('/AddTask', [App\Http\Controllers\TaskController::class, 'AddTask']);
+    Route::post('/AddTaskAction', [App\Http\Controllers\TaskController::class, 'AddTaskAction']);
+    Route::post('/UpdateTaskStatus', [App\Http\Controllers\TaskController::class, 'UpdateTaskStatus']);
+    Route::get('GetTask/{id}', [App\Http\Controllers\TaskController::class, 'GetTask']);
+    Route::post('UpdateTask', [App\Http\Controllers\TaskController::class, 'UpdateTask']);
+    Route::get('DeleteTask', [App\Http\Controllers\TaskController::class, 'DeleteTask']);
 });
+
