@@ -68,7 +68,7 @@ class TaskController extends Controller
                 $updatedata= Task::Where('id',$taskid)->update(["title" => $title,"description" => $description,"status" => $status]);
             }
             $getalldata = Task::Where('user_id',Auth::id())->orderBy('id', 'DESC')->get();
-            return response()->json(['status' => true,'getalldata'=> $getalldata]);
+            return response()->json(['status' => true,'getalldatares'=> $getalldata]);
         }catch(Exception $e){
         return response()->json(['status' => false, 'error' => $e->getMessage()], 404);
         }

@@ -28,7 +28,7 @@
                                 $task=DB::table('task_tbl')->where('user_id',Auth::id())->orderBy('id', 'DESC')->get(); 
                                 $no=1;
                                 ?>
-                                <tbody>
+                                <tbody id="taskbody">
                                     @foreach($task as $row)
                                     <tr>
                                         <td>{{$no}}</td>
@@ -54,18 +54,17 @@
                                                         <option value="Pending">Pending</option>
                                                         <option value="InProgress">In Progress</option>
                                                         <option value="Complete" selected>Completed</option>
-                                                    @endif
+                                                        @endif
                                                     </select>
                                         </td>
                                         <td class="" style="width:20%">
                                             <div class="d-flex justify-content-center">
-                                                <button onclick="EditTask({{ $row->id }})"
+                                                <button onclick="EditTask({{$row->id}})"
                                                     class="btn btn-inverse-success btn-rounded btn-icon "
                                                     style="padding-top: 5px;margin-right: 5px">Edit</button>
-                                                <button onclick="DeleteTask({{ $row->id }})"
+                                                <button onclick="DeleteTask({{$row->id}})"
                                                     class="btn btn-inverse-danger btn-rounded btn-icon"
-                                                    style="padding-top: 5px;margin-right: 10px">delete
-                                                </button>
+                                                    style="padding-top: 5px;margin-right: 10px">delete</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -82,7 +81,6 @@
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- Modal content for editing goes here -->
                 <h2 class="p-4 text-center">Edit Task</h2>
                 <div class="card my-2 m-3">
                     <div class="card-body">
@@ -113,7 +111,6 @@
                                 </div>
                             </div>
                     </div>
-                    <!-- <button type="submit" class="btn  w-100">Submit</button> -->
                     <button type="submit" class="btn btn-md text-white my-4  w-100"
                         style=" background-color: #2099d8;font-size:14px;"> Submit </button>
                     </form>
@@ -169,7 +166,7 @@ function DeleteTask(taskId) {
 
 function EditTask(taskId) {
     $.ajax({
-        url: '/GetTask/' + taskId, // URL to fetch task data for given ID
+        url: '/GetTask/' + taskId,
         type: 'GET',
         success: function(response) {
             console.log(response.getTask)
@@ -215,94 +212,22 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             success: function(response) {
-                // Close modal
-                console.log(response.getalldata);
-                
+                console.log(response.getalldatares);
                 if (response.status == true) {
                     $('#editModal').modal('hide');
                     alert('Task Update successfully')
+                    location.reload();
                 } else {
                     alert('OOPS! Task not Updated.')
                 }
             },
             error(req, status, error) {
                 console.log("ERROR:" + error.toString() + " " + status + " " + req
-                .responseText);
+                    .responseText);
             }
         });
     })
 });
-// $(document).ready(function()
-// {
-//     $.ajaxSetup({
-//     headers: {
-//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//     }
-//     });
-//     $('#statusItem').change(function(e){
-//         e.preventDefault();
-//     var selectedOption = $(this).val();
-//     console.log("Selected option: " + selectedOption);
-//     let formData = new FormData();
-//     formData.append('status', selectedOption);
-//     $.ajax({
-//             method: 'POST',
-//             url: '/UpdateTaskStatus',
-//             contentType: false,
-//             processData: false,
-//             data: formData,
-//             success: function (response) {
-//                 if(response.status == "200") {
-//                     alert('Task added successfully')
-//                 }else{
-//                     alert('Task failed to be added successfully')
-//                 }
-//             },
-//             error(req, status, error) {
-//                 console.log("ERROR:" + error.toString() + " " + status + " " + req.responseText);
-//             }
-//         });
-//     // You can perform any actions based on the selected option here
-// });
-// $(".addTask").click(function(){
-//     var newTaskEntry = $(".task-entry:first").clone();
-//     newTaskEntry.find('input').val('');
-//     newTaskEntry.insertBefore("#taskForm button[type='submit']");
-// });
-// $("#taskForm").submit(function(e){
-//     e.preventDefault();
-//     var formData1 = $(this).serializeArray();
-//     const outputArray = [];
-//         for (let i = 0; i < formData1.length; i += 3) {
-//             const obj = {};
-//             for (let j = 0; j < 3; j++) {
-//                 const { name, value } = formData1[i + j];
-//                 obj[name] = value;
-//             }
-//             outputArray.push(obj);
-//         }
-//     let formData = new FormData();
-//     formData.append('data', JSON.stringify(outputArray));
-//     console.log(formData.entries());
-//     $.ajax({
-//         method: 'POST',
-//         url: '/AddTaskAction',
-//         contentType: false,
-//         processData: false,
-//         data: formData,
-//         success: function (response) {
-//             if(response.status == "200") {
-//                 alert('Task added successfully')
-//             }else{
-//                 alert('Task failed to be added successfully')
-//             }
-//         },
-//         error(req, status, error) {
-//             console.log("ERROR:" + error.toString() + " " + status + " " + req.responseText);
-//         }
-//     });
-//     $(this).find('input').val('');
-// });
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -314,5 +239,4 @@ $(document).ready(function() {
     });
 });
 </script>
-
 @endsection('content')
